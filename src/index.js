@@ -7,24 +7,11 @@ class App extends React.Component {
     super(props)
     this.state = {
       longitude: null,
-      latitude: null
+      latitude: null,
+      error: ''
     }
   }
-  
-
-  
-  // async getPosition() {
-  //   return await window.navigator.geolocation.getCurrentPosition(
-  //     position => {
-  //       console.log(position)
-  //     }, 
-  //     err => console.log(err)
-  //   )
-  // }
-  
-  render() {
-    // const position = this.getPosition().then((data) => this.state.position = data)
-    // console.log('test: ',position)
+  componentDidMount() {
     window.navigator.geolocation.getCurrentPosition(
       position => {
         console.log(position.coords.latitude, position.coords.longitude)
@@ -33,11 +20,24 @@ class App extends React.Component {
           longitude: position.coords.longitude
         })
       }, 
-      err => console.log(err)
+      err => {
+        console.log(err)
+        this.setState({
+          error: err.message
+        })
+      }
     )
+  }
+
+
+  render() {
+    // const position = this.getPosition().then((data) => this.state.position = data)
+    // console.log('test: ',position)
+    
     return (
       <div>
         <div>Your position is: {this.state.latitude}, {this.state.longitude}</div>
+        <div>{this.state.error ? `Error: ${this.state.error}` : null}</div>
       </div>
     )
   }
